@@ -1,0 +1,46 @@
+{% extends "base_templates/base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <h1>{% trans "Add a Review" %}</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="form-group">
+      {{ form.reviewer_name.label_tag }}
+      {{ form.reviewer_name }}
+      {{ form.reviewer_name.errors }}
+    </div>
+    <div class="form-group">
+      {{ form.helper_name.label_tag }}
+      {{ form.helper_name }}
+      {{ form.helper_name.errors }}
+    </div>
+    <div class="form-group">
+      {{ form.tag.label_tag }}
+      {{ form.tag }}
+      {{ form.tag.errors }}
+    </div>
+    <div class="form-group">
+      {{ form.rating.label_tag }}
+      {{ form.rating }}
+      {{ form.rating.errors }}
+    </div>
+    <div class="form-group">
+      {{ form.level_of_service.label_tag }}
+      {{ form.level_of_service }}
+      {{ form.level_of_service.errors }}
+    </div>
+    <div class="form-group">
+      {{ form.review_text.label_tag }}
+      {{ form.review_text }}
+      {{ form.review_text.errors }}
+    </div>
+    <div class="form-group">
+      {{ form.wishes.label_tag }}
+      {{ form.wishes }}
+      {{ form.wishes.errors }}
+    </div>
+    <input type="submit" value="{% trans "Submit" %}">
+  </form>
+{% endblock %}

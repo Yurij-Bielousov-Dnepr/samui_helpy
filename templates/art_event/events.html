@@ -1,0 +1,87 @@
+{% extends "base_templates/base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% block content %}
+  <div>
+
+      <button type="submit"><a href="{% url 'add_event' %}">{% trans "Add Events" %}</a></button>
+
+{#   <h2>{% trans "Calendar" %}</h2>#}
+{#      <h1>{% trans "Events Calendar" %}</h1>#}
+{#    <div id="calendar"></div>#}
+  </div>
+  {% for event in events %}
+    <div class="event">
+      <h2>{{ event.title }}</h2>
+      <p>{{ event.description }}</p>
+      <p>{% trans 'Date:' %} {{ event.date }}</p>
+    </div>
+  {% empty %}
+    <p>{% trans 'No events yet.' %}</p>
+  {% endfor %}
+{#  <div>#}
+{#    <h2>{% trans "Upcoming events" %}</h2>#}
+{#    <ul>#}
+{#      {% for event in events %}#}
+{#        <li>{{ event.title }} - {{ event.date }} - {{ event.location }}</li>#}
+{#      {% endfor %}#}
+{#    </ul>#}
+{#  </div>#}
+{##}
+{#  <div>#}
+{#    <h2>{% trans "Google Maps" %}</h2>#}
+{#    <!-- Добавьте здесь код для отображения карты Google -->#}
+{#    <div id="map"></div>#}
+{#  </div>#}
+{% endblock %}
+
+{% block extra_css %}
+  <link href="{% static 'fullcalendar/core/main.css' %}" rel="stylesheet">
+  <link href="{% static 'fullcalendar/daygrid/main.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'jquery/jquery-3.6.3.min.js' %}"></script>
+  <script src="{% static 'moment/moment-with-locales.min.js' %}"></script>
+  <script src="{% static 'fullcalendar/core/main.min.js' %}"></script>
+  <script src="{% static 'fullcalendar/daygrid/main.min.js' %}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: ['dayGrid'],
+        events: [
+          {% for event in events %}
+            {
+              title: '{{ event.title }}',
+              start: '{{ event.date|date:"Y-m-d" }}',
+              url: '/events/{{ event.id }}'
+            },
+          {% endfor %}
+        ]
+      });
+      calendar.render();
+    });
+  </script>
+
+  <script>
+    function initMap() {
+      // Создаем объект карты и устанавливаем его параметры
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 9.5120, lng: 100.0136}, // Координаты центра карты
+        zoom: 12 // Масштаб карты
+      });
+
+      // Создаем маркер на карте
+      var marker = new google.maps.Marker({
+        position: {lat: 37.7749, lng: -122.4194}, // Координаты маркера
+        map: map, // Карта, на которой будет размещен маркер
+        title: 'San Francisco' // Название маркера
+      });
+    }
+  </script>
+
+  <!-- Загружаем Google Maps JavaScript API с ключом -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% comment %}
+    Bootstrap 4 template tags.
+{% endcomment %}
+
+{% load static %}
+
+{% block bootstrap4_css %}
+    <link rel="stylesheet" href="{% static 'bootstrap4/css/bootstrap.min.css' %}">
+{% endblock %}
+
+{% block bootstrap4_js %}
+    <script src="{% static 'bootstrap4/js/jquery-3.6.3.min.js' %}"></script>
+    <script src="{% static 'bootstrap4/js/popper.min.js' %}"></script>
+    <script src="{% static 'bootstrap4/js/bootstrap.min.js' %}"></script>
+{% endblock %}
+
+{% comment %}
+    Render Bootstrap alert box.
+
+    Usage:
+
+    {% bootstrap4_alert alert_type message %}
+{% endcomment %}
+{% macro bootstrap4_alert(alert_type, message) %}
+    <div class="alert alert-{{ alert_type }}" role="alert">
+        {{ message }}
+    </div>
+{% endmacro %}
+
+{% comment %}
+    Render Bootstrap button.
+
+    Usage:
+
+    {% bootstrap4_button button_text button_url button_type %}
+{% endcomment %}
+{% macro bootstrap4_button(button_text, button_url, button_type) %}
+    <a href="{{ button_url }}" class="btn btn-{{ button_type }}">{{ button_text }}</a>
+{% endmacro %}
+
+{% comment %}
+    Render Bootstrap form group.
+
+    Usage:
+
+    {% bootstrap4_form_group label field %}
+{% endcomment %}
+{% macro bootstrap4_form_group(label, field) %}
+    <div class="form-group">
+        <label>{{ label }}</label>
+        {{ field }}
+    </div>
+{% endmacro %}

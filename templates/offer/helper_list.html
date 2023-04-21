@@ -1,0 +1,44 @@
+{% extends 'base_templates/base.html' %}
+{% load i18n %}
+
+{% comment %}
+шаблон для выбора добавить, обновить или удалить данные помощника
+{% endcomment %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    <p>
+<h1>{% trans "Would you like to help people and earn extra income? Join our team, find friends with similar interests, improve your abilities, and add your skills and talents to our database. You can edit your information, set a 'ready to help now' flag to increase your visibility in search results, or delete your data from our database. Fill out a simple form to find a rewarding job that fits you!" %} </h1>
+
+    <p>{% trans "We are grateful that you share our mission - to help people. Please choose the aspects and level of possible help and enter them into our Database. Your information is only displayed when a user searches for a helper." %}</p>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <a href="{% url 'add_helper' %}">
+        <button type="button">{% trans "Add Helper" %}</button>
+      </a>
+      <br>
+      {% if user.helper %}
+        <p>{% trans "If you are already in our Database, we suggest updating your information." %}</p>
+        <a href="{% url 'update_helper_info' user.helper.pk %}">
+          <button>{% trans "Edit My Data" %}</button>
+        </a>
+      {% endif %}
+      <br>
+      {% if user.helper %}
+        <p>{% trans "If you want to remove your data from our Database, please click the button below." %}</p>
+        <a href="{% url 'delete_helper' user.helper.pk %}">
+          <button>{% trans "Delete My Data" %}</button>
+        </a>
+      {% endif %}
+    </form>
+  {% else %}
+    <p>
+      {% trans "Please" %}
+      <a href="{% url 'account_register' %}" class="btn btn-primary">{% trans "register" %}</a>
+      {% trans "or" %}
+      <a href="{% url 'account_login' %}" class="btn btn-secondary">{% trans "login" %}</a>
+      {% trans "to add yourself to our list of helpers." %}
+    </p>
+  {% endif %}
+{% endblock %}

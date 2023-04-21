@@ -1,0 +1,106 @@
+{% extends "base_templates/base.html" %}
+{% load i18n %}
+{% load static %}
+<!-- templates/review.html    -->
+{% block content %}
+  <div class="container mt-3">
+    <div class="row justify-content-between">
+      <div class="col-md-auto">
+        <h1>{% trans "Reviews" %}</h1>
+      </div>
+      <div class="col-md-auto">
+      <button type="button" onclick="location.href='{% url 'reviews_add' %}'" class="btn btn-primary">{% trans "Add review" %}</button>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {% trans "Sort by" %}
+          </button>
+          <div class="dropdown-menu" aria-labelledby="sortDropdown">
+            <a class="dropdown-item" href="?order=-created_at{% if page %}&page={{ page }}{% endif %}">{% trans "Date added (newest first)" %}</a>
+            <a class="dropdown-item" href="?order=created_at{% if page %}&page={{ page }}{% endif %}">{% trans "Date added (oldest first)" %}</a>
+            <a class="dropdown-item" href="?order=customer_name{% if page %}&page={{ page }}{% endif %}">{% trans "Author name" %}</a>
+            <a class="dropdown-item" href="?order=-rating{% if page %}&page={{ page }}{% endif %}">{% trans "Rating (highest first)" %}</a>
+            <a class="dropdown-item" href="?order=rating{% if page %}&page={{ page }}{% endif %}">{% trans "Rating (lowest first)" %}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      {% for review in reviews %}
+        <div class="col-md-4 mb-3">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">{{ review.customer_name }}</h5>
+              <p class="card-text">
+                {% trans "Rating" %}: {{ review.rating }}<br>
+                {% trans "Comment" %}: {{ review.comment }}
+              </p>
+              <p class="card-text"><small class="text-muted">{{ review.created_at }}</small></p>
+            </div>
+          </div>
+        </div>
+        {% if forloop.counter|divisibleby:3 %}
+          </div><div class="row">
+        {% endif %}
+      {% empty %}
+        <div class="col-md-12">
+          <p class="text-center">{% trans "No reviews yet." %}</p>
+        </div>
+      {% endfor %}
+    </div>
+    {% if is_paginated %}
+      <nav aria-label="Reviews pagination">
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if order %}&order={{ order }}{% endif %}" aria-label="{% trans 'Previous' %}">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">{% trans 'Previous' %}</span>
+              </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">{% trans 'Previous' %}</span>
+              </span>
+            </li>
+          {% endif %}
+          {% for i in paginator.page_range %}
+            {% if page_obj.number == i %}
+              <li class="page-item active">
+                <span class="page-link">{{ i }}</span>
+              </li>
+            {% else %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ i }}{% if order %}&order={{ order }}{% endif %}">{{ i }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if order %}&order={{ order }}{% endif %}" aria-label="{% trans 'Next' %}">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">{% trans 'Next' %}</span>
+              </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">{% trans 'Next' %}</span>
+              </span>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+  </div>
+{% endblock %}
+
+

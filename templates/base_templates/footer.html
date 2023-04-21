@@ -1,0 +1,17 @@
+<footer>
+  {% load i18n %}
+    <div class="partners">
+    <h4>{% trans "Our Partners:" %}</h4>
+    <ul>
+        {% for sponsor in sponsors %}
+            <li><a href="{{ sponsor.url }}">{{ sponsor.name }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+  <div class="container">
+   <p> &copy; ЮрийБелл2023. {% trans "All rights reserved." %} </p>
+{# " language_code='en' http://dimasfrolov.com/  <a href="{% url 'index' %}" class="btn btn-primary">{% trans "Go back to the main page" language_code='en' %}</a>#}
+
+  </div>
+
+</footer>

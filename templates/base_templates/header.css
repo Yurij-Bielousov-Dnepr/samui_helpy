@@ -1,0 +1,34 @@
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+}
+
+.language-selector {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.language-selector li {
+  margin-right: 10px;
+}
+
+.menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu li {
+  margin-right: 10px;
+}
+
+.menu li:last-child {
+  margin-right: 0;
+}

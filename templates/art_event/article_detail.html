@@ -1,0 +1,13 @@
+{% extends 'base_templates/base.html' %}
+
+{% load i18n %}
+
+{% block content %}
+  <h2>{% trans "Article Details" %}</h2>
+  <p><strong>{% trans "Title" %}:</strong> {{ article.title }}</p>
+  <p><strong>{% trans "Content" %}:</strong> {{ article.content }}</p>
+  <p><strong>{% trans "Rating" %}:</strong> {{ article.rating }}</p>
+  <p><strong>{% trans "Tags" %}:</strong> {% for tag in article.tags.all %}{{ tag.name }} {% endfor %}</p>
+  <p><strong>{% trans "Approved" %}:</strong> {% if article.is_approved %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</p>
+  <p><strong>{% trans "Favorite" %}:</strong> {% if article.is_favorite %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</p>
+{% endblock %}

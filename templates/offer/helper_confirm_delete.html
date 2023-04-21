@@ -1,0 +1,13 @@
+{% extends 'base_templates/base.html' %}
+{% load i18n %}
+{% block content %}
+  <h1>{% trans "Deleting profile" %}</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.confirm.label_tag }}
+    {{ form.confirm }}
+    <br>
+    <button type="submit" class="btn btn-danger">{% trans "Delete" %}</button>
+    <a href="{% url 'helper_list' object.pk %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
+  </form>
+{% endblock %}

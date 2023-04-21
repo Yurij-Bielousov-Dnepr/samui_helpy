@@ -1,0 +1,10 @@
+{% extends 'base_templates/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+  <div class="alert alert-success" role="alert">
+    {% trans "Helper added or updated successfully!" %}
+  </div>
+  <a href="{% url 'helper_list' %}" class="btn btn-primary">{% trans 'Back to helper list' %}</a>
+{% endblock %}

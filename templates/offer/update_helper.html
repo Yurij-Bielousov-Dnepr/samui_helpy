@@ -1,0 +1,18 @@
+{% extends 'base_templates/base.html' %}
+{% comment %}
+шаблон для того чтобы обновить данные помощника
+{% endcomment %}
+
+{% load i18n %}
+
+{% block content %}
+  <h1>{% trans 'Update' %} {% trans 'Helper Data' %}</h1>
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" id="{{ field.id_for_label }}" value="{{ field.value|default:'' }}" {% if field.field.required %}required{% endif %}><br>
+    {% endfor %}
+    <button type="submit">{% trans 'Update' %}</button>
+  </form>
+{% endblock %}

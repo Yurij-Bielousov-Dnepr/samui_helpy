@@ -1,0 +1,75 @@
+{% extends "base_templates/base.html" %}
+{% load i18n %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+   <h1>{% trans "Need help?" %}</h1>
+    <form method="get" action="{% url 'helpmy' %}">
+      {% csrf_token %}
+      <label for="{{ form.user_nick.id_for_label }}">{{ form.user_nick.label }}</label>
+      {{ form.user_nick }}
+      <br>
+      <label for="{{ form.category.id_for_label }}">{{ "Category" }}:</label>
+        {{ form.category.as_widget }}
+      <br>
+      <label for="{{ form.problem_description.id_for_label }}">{{ "Describe problem" }}:</label>
+      {{ form.problem_description }}
+      <br>
+      <label for="{{ form.district.id_for_label }}">{{ "District" }}:</label>
+      {{ form.district.as_widget }}
+      <br>
+      <label for="{{ form.level.id_for_label }}">{{ "Level" }}:</label>
+      {{ form.level }}
+      <br>
+      <label for="{{ form.languages.id_for_label }}">{{ form.languages.label }}</label>
+      {{ form.languages }}
+      <br>
+      <button type="submit">{% trans "Search for helpers" %}</button>
+    </form>
+    {% if helpers %}
+      <hr>
+      <h2>{% trans "Search results:" %}</h2>
+      <div class="row">
+        {% for helper in helpers %}
+          <div class="col s12 m4">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">{{ helper.name }}</span>
+                <p>{{ helper.description }}</p>
+              </div>
+              <div class="card-action">
+                <a href="#">{{ helper.contacts }}</a>
+                <button class="waves-effect waves-light btn" type="submit">{% trans "Request help" %}</button>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      {% if helpers.paginator.num_pages > 1 %}
+        <ul class="pagination">
+          {% if helpers.has_previous %}
+            <li class="waves-effect"><a href="?page={{ helpers.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+          {% endif %}
+        {% for i in helpers.paginator.page_range %}
+  {% if helpers.number == i %}
+    <li class="active"><a href="#">{{ i }}</a></li>
+  {% elif i > helpers.number|add:'-3' and i < helpers.number|add:'3' %}
+    <li class="waves-effect"><a href="?page={{ i }}">{{ i }}</a></li>
+  {% else %}
+    <li><a href="?page={{ i }}">{{ i }}</a></li>
+  {% endif %}
+{% endfor %}
+          {% if helpers.has_next %}
+            <li class="waves-effect"><a href="?page={{ helpers.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+          {% endif %}
+        </ul>
+      {% endif %}
+    {% elif request.GET %}
+      <hr>
+      <p>{% trans "Unfortunately, no available helpers were found with the selected parameters. Try expanding the district or reducing the number of required tags." %}</p>
+    {% endif %}
+  {% else %}
+    <p>{% trans "Please log in to use this feature." %}</p>
+    <a href="{% url 'account_login' %}">{% trans "Go to login page" %}</a>
+  {% endif %}
+{% endblock %}

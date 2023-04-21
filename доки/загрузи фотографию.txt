@@ -1,0 +1,46 @@
+загрузи фотографию
+модерация
+добавляем статьи прошедшие модерацию через фильтр
+
+Чтобы загрузить фотографию в базу данных Django, вы можете использовать модель Django, которая содержит поле ImageField.
+
+Пример модели, которая содержит поле ImageField:
+
+python
+Copy code
+from django.db import models
+
+class MyModel(models.Model):
+    my_image = models.ImageField(upload_to='images/')
+Здесь мы определяем модель MyModel с полем my_image, которое является ImageField. Параметр upload_to указывает путь для сохранения загруженного изображения в файловой системе. В данном случае, загруженное изображение будет сохранено в папке images/.
+
+После того, как вы определили модель, вы можете использовать стандартный механизм Django для загрузки файлов в базу данных. Например, вы можете создать форму, которая позволяет пользователям загружать изображения:
+
+python
+Copy code
+from django import forms
+from .models import MyModel
+
+class MyForm(forms.ModelForm):
+    class Meta:
+        model = MyModel
+        fields = ['my_image']
+В этом примере мы определяем форму MyForm, которая наследуется от ModelForm и использует модель MyModel. В поле fields мы указываем, какие поля из модели должны быть включены в форму.
+
+Чтобы обработать загруженное изображение, вы можете использовать метод save() модели. Например, вы можете переопределить метод save() в модели MyModel, чтобы изменить имя файла, сохраняемого в базе данных:
+
+python
+Copy code
+from django.db import models
+from django.utils.text import slugify
+
+class MyModel(models.Model):
+    my_image = models.ImageField(upload_to='images/')
+
+    def save(self, *args, **kwargs):
+        # Изменяем имя файла перед сохранением в базу данных
+        self.my_image.name = slugify(self.my_image.name)
+        super(MyModel, self).save(*args, **kwargs)
+В этом примере мы переопределяем метод save() в модели MyModel, чтобы изменить имя файла перед сохранением в базе данных. Мы используем функцию slugify() из модуля django.utils.text для преобразования имени файла в URL-совместимый формат.
+
+Теперь вы можете использовать форму MyForm для загрузки изображений в базу данных Django.

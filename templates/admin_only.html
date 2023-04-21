@@ -1,0 +1,70 @@
+{% extends "base_templates/base.html" %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-md-6">
+      <h2>{% trans "Moderate Articles" %}</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>{% trans "Title" %}</th>
+            <th>{% trans "Author" %}</th>
+            <th>{% trans "Date Created" %}</th>
+            <th>{% trans "Actions" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for article in articles %}
+          <tr>
+            <td>{{ article.title }}</td>
+            <td>{{ article.author }}</td>
+            <td>{{ article.date_created }}</td>
+            <td>
+              <form action="{% url 'approve_article' article.id %}" method="POST" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">{% trans "Approve" %}</button>
+              </form>
+              <form action="#" method="POST" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">{% trans "Reject" %}</button>
+              </form>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4">{% trans "No articles for moderation." %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-6">
+      <h2>{% trans "Add Events to Calendar" %}</h2>
+      <form action="#" method="POST">
+        <div class="form-group">
+          <label for="event-name">{% trans "Event Name" %}</label>
+          <input type="text" class="form-control" id="event-name" name="event-name">
+        </div>
+        <div class="form-group">
+          <label for="event-date">{% trans "Event Date" %}</label>
+          <input type="date" class="form-control" id="event-date" name="event-date">
+        </div>
+        <div class="form-group">
+          <label for="event-time">{% trans "Event Time" %}</label>
+          <input type="time" class="form-control" id="event-time" name="event-time">
+        </div>
+        <button type="submit" class="btn btn-primary">{% trans "Add" %}</button>
+      </form>
+    </div>
+  </div>
+{% if articles %}
+<h3>{% trans "Approve Articles" %}</h3>
+<ul>
+{% for article in articles %}
+<li>{{ article.title }} <a href="{% url 'approve_article' article.id %}">{% trans "Approve" %}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}

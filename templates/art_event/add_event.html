@@ -1,0 +1,47 @@
+{% extends 'base_templates/base.html' %}
+<!-- add_event.html -->
+{% load i18n %}
+
+{% block content %}
+  <h2>{% trans 'Add Event' %}</h2>
+<form method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+    {{ form.title }}
+  </div>
+  <div class="form-group">
+    <label for="{{ form.date.id_for_label }}">{{ form.date.label }}</label>
+    {{ form.date }}
+  </div>
+  <div class="form-group">
+    <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+    {{ form.description }}
+  </div>
+  <div class="form-group">
+    <label for="{{ form.location.id_for_label }}">{{ form.location.label }}</label>
+    {{ form.location }}
+  </div>
+  <div class="form-group">
+    <label for="{{ form.tags.id_for_label }}">{{ form.tags.label }}</label>
+    {% for tag in form.tags %}
+      {{ tag }} {{ tag.choice_label }}
+    {% endfor %}
+  </div>
+  <button type="submit" class="btn btn-primary">{% trans 'Create Event' %}</button>
+</form>
+{#    <label for="date">{% trans 'Enter Event Date or Choose from Calendar' %}:</label>#}
+{#    <input type="date" id="date" name="date"><br><br>#}
+{##}
+{#    <label for="location">{% trans 'Enter Event Location or Choose from Map' %}:</label>#}
+{#    <input type="text" id="location" name="location"><br><br>#}
+{##}
+{#    <label for="time">{% trans 'Enter Event Time' %}:</label>#}
+{#    <input type="time" id="time" name="time"><br><br>#}
+{##}
+{#    <label for="name">{% trans 'Please Introduce Yourself' %}:</label>#}
+{#    <input type="text" id="name" name="name"><br><br>#}
+
+    <button type="submit">{% trans 'Submit Event' %}</button>
+  </form>
+{% endblock %}

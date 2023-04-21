@@ -1,0 +1,19 @@
+{% extends 'base_templates/base.html' %}
+{% load i18n %}
+
+{% block content %}
+  <h2>{% trans 'Add Article' %}</h2>
+  <form method="post">
+    {% csrf_token %}
+    <label for="{{ form.title.id_for_label }}">{{ 'Enter article title:' }}</label>
+    {{ form.title }}
+    <br>
+    <label for="{{ form.content.id_for_label }}">{{ 'Enter article content:' }}</label>
+    {{ form.content }}
+    <br>
+    <label for="{{ form.tags.id_for_label }}">{{ 'Select article tags:' }}</label>
+     {{ form.as_p }}
+    <br>
+    <button type="submit">{% trans 'Submit Article' %}</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% load static %}
+{% load bootstrap4 %}
+{% load i18n %}
+
+
+{#{% {% load languages %} get_available_languages as LANGUAGES %}#}
+{#{% get_current_language as CURRENT_LANGUAGE %}#}
+
+<!DOCTYPE html>
+<html lang="{{ CURRENT_LANGUAGE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/png" href="{{ MEDIA_URL }}favicon.ico">
+    <title>{% block title %}{% endblock %}</title>
+
+{#    <link rel="stylesheet" href="{% static 'bootstrap4/css/bootstrap.min.css' %}"> #}
+<link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="{% static 'jquery/jquery-3.6.3.min.js' %}"></script>
+    <script src="{% static 'bootstrap4/js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+<label for="language-select">{% trans "Choose a language" %}:</label>
+<select id="language-select">
+{% for language in languages_with_flags %}
+  <option value="{{ language.code }}" data-image="/static/flags/{{ language.flag }}.svg">{{ language.name }}</option>
+{% endfor %}
+</select>
+<a href="{% url 'index' %}">Helpy</a>
+<a href="{% url 'helper_list' %}">Offer help</a>
+<a href="{% url 'reviews_list' %}">Reviews</a>
+<a href="{% url 'vip' %}">VIP</a>
+<a href="{% url 'articles' %}">Articles</a>
+<a href="{% url 'events' %}">Events</a>
+<a href="{% url 'about' %}">About</a>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            {% for item in menu_items %}
+                <li class="nav-item {% if item.title == current_view_name %}active{% endif %}">
+                    <a class="nav-link" href="{{ item.url }}">{{ item.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    <!-- Вставьте этот код в шаблон перед циклом for menu_items -->
+{% if menu_items %}
+    <p>Menu items found: {{ menu_items|length }}</p>
+{% else %}
+    <p>No menu items found</p>
+{% endif %}
+<ul class="navbar-nav ml-auto">
+    {% if user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Logout" %}</a>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'account_login' %}">{% trans "Login" %}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'account_signup' %}">{% trans "Register" %}</a>
+        </li>
+    {% endif %}
+</ul>
+
+    </div>
+</nav>
+<div class="container py-4">
+    {% block content %}
+    {% endblock %}
+</div>
+{% block scripts_bottom %}
+{% endblock %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var languageSelect = document.getElementById('language-select');
+    languageSelect.addEventListener('change', function() {
+      var selectedOption = this.options[this.selectedIndex];
+      var flag = selectedOption.getAttribute('data-image');
+      if (flag) {
+        this.style.backgroundImage = 'url(' + flag + ')';
+        this.classList.add('flag-icon');
+      } else {
+        this.style.backgroundImage = 'none';
+        this.classList.remove('flag-icon');
+      }
+    });
+    languageSelect.dispatchEvent(new Event('change'));
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+{% extends "base_templates/base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+<h1>{% trans "Articles" %}</h1>
+<button type="submit"><a href="{% url 'add_article' %}">{% trans "Add Article" %}</a></button>
+
+<form method="get">
+  {% csrf_token %}
+  <label for="tags">{% trans "Tags" %}:</label><br>
+  {% if tags %}
+    {% for tag in tags %}
+      <input type="checkbox" id="tag_{{ tag }}" name="tags" value="{{ tag }}">
+      <label for="tag_{{ tag }}">{{ tag }}</label><br>
+    {% endfor %}
+  {% else %}
+    <p>{% trans "No tags found." %}</p>
+  {% endif %}
+  <br>
+
+  <label for="search">{% trans "Search for articles" %}:</label><br>
+  <input type="text" id="search" name="search">
+  <button type="submit">{% trans "Search" %}</button><br><br>
+</form>
+
+<div id="articles">
+  {% for article in articles %}
+    <h2>{{ article.title }}</h2>
+    <p>{{ article.content }}</p>
+    {% if article.tags.all %}
+      <p>{% trans "Tags" %}:
+        {% for tag in article.tags.all %}
+          <a href="{% url 'articles' %}?tags={{ tag }}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </p>
+    {% endif %}
+  {% empty %}
+    <p>{% trans "No articles found." %} <a href="{% url 'articles' %}">{% trans "Go back" %}</a>.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}
+
+
+<!-- Здесь мы добавили поля для предложения статьи (<input type="text" id="title" name="title">) и облако тегов для выбора тегов ({% include "tag_cloud.html" %}). Мы также добавили поле для поиска статей (<input type="text" id="search" name="search">) и кнопку для отправки запроса на поиск (<button type="submit">{% trans "Search" %}</button>).
+
+В блоке div#articles мы выводим информацию о найденных статьях. Для каждой статьи мы выводим заголовок ({{ article.title }}), содержание ({{ article.content }}) и теги ({% include "tags.html" with tags=article.tags %}). Если статей не найдено, мы выводим соответствующее сообщение (<p>{% trans "No articles found." %}</p>).
+
+Также мы добавили поддержку мультиязычности с помощью тегов {% load i18n %} и {% trans "Some text" %}.
+-->

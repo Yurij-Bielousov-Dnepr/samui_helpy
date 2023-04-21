@@ -1,0 +1,11 @@
+from django.utils.translation import activate
+
+def set_language(request):
+    selected_language = request.GET.get('language')
+    if selected_language:
+        activate(selected_language)
+        response = HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        response.set_cookie('django_language', selected_language)
+        return response
+    else:
+        return HttpResponseBadRequest()

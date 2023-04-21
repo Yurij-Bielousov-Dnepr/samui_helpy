@@ -1,0 +1,25 @@
+{% extends "base_templates/base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+<h1>{% trans "Welcome to my multilingual project!" %}</h1>
+
+
+<h2>{% trans "Contacts" %}</h2>
+<p>{% trans "Donations, thanks, and more..." %}</p>
+
+<h2>{% trans "Project Creation Story" %}</h2>
+<p>{% trans "In February 2022, just before the start of the general chaos in my country, I spent three weeks as a guest on the island of Samui, a place where everyone who has been there wants to stay, and from this desire projects are born." %}</p>
+
+<p>{% trans "I didn't want to break the tradition and also gave birth to what I lacked and what could be useful to a person in my circumstances." %}</p>
+
+<p>{% trans "Six months passed, and after recovering from the shock, I took the next step: I enrolled in Python courses, and another 3 months later the Project took the form of a concept that will be implemented." %}</p>
+
+<p>{% trans "One year later. Some time will be spent on promoting and testing the viability, but I believe in it." %}</p>
+
+<p>{% trans "Project birthday: December 1, 2022. Conception Day: February 14, 2022." %}</p>
+{% endblock %}
+
+
+

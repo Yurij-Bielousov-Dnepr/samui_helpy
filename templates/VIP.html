@@ -1,0 +1,21 @@
+{% extends 'base_templates/base.html' %}
+ {% load i18n %}
+{% block content %}
+  <h1>{% trans "VIP Services" %}</h1>
+  <p>{% trans "Become a VIP member and enjoy exclusive benefits and privileges:" %}</p>
+<ul>
+  <li>{% trans "Priority placement in search results" %}</li>
+  <li>{% trans "Discounts on services and products from our partners" %}</li>
+  <li>{% trans "A link to your website at the bottom of every page on our site" %}</li>
+  <li>{% trans "Exclusive events and experiences" %}</li>
+  <li>{% trans "24/7 support for VIP clients" %}</li>
+       </ul>
+
+  <p>{% trans "To become a VIP member, simply fill out the form below:" %}</p>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">{% trans "Submit" %}</button>
+  </form>
+{% endblock %}

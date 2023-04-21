@@ -1,0 +1,40 @@
+Ф-HelpForm В-help_view Ш-helpy/help/helpmy.html страничка для поиска помошника
+
+добавить поля: "userNick",(moto\real_estate\tourism\need_shopping\need_translate\puplic_serv_need\meeting),Describe_problem
+"district", "level", "контакты" и поддержку мультиязычности в шаблон <!-- templates/help.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Need help?</h1>
+{% endblock %}
+
+static создайте поддиректорию fullcalendar/core и fullcalendar/daygrid
+
+добавь в форму блок "язык общения," с возможностью выбрать несколько из списка:
+ Укр, тайский, Английский, французский, итальянский, немецкий и руский
+
+ интегрируй в код
+{% get_available_languages as LANGUAGES %}
+{% get_current_language as CURRENT_LANGUAGE %}
+<form action="{% url 'set_language' %}" method="POST">
+  {% csrf_token %}
+  <label for="language-selector">Language:</label>
+  <select class="language-selector" id="language-selector" name="language">
+    {% for code, name in LANGUAGES %}
+      <option value="{{ code }}" {% if code == CURRENT_LANGUAGE %}selected{% endif %}>
+        {% trans name %}
+      </option>
+    {% endfor %}
+  </select>
+  <button type="submit">Submit</button>
+</form>
+список используемых языков из настроек проекта LANGUAGES = [
+    ('uk', 'Українська'),
+    ('th', 'ภาษาไทย'),
+    ('en', 'English'),
+    ('fr', 'Français'),
+    ('it', 'Italiano'),
+    ('de', 'Deutsch'),
+    ('ru', 'Русский'),
+]

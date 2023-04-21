@@ -1,0 +1,86 @@
+{% extends "base_templates/base.html" %}
+{% load i18n %}
+{% comment %}
+шаблон для вывода результатов поиска помощника
+{% endcomment %}
+
+{% block content %}
+<h1>{% trans "Search results:" %}</h1>
+{% if free_helpers %}
+    <div class="row">
+        {% for helper in free_helpers %}
+        <div class="col s12 m4">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">{{ helper.name }}</span>
+                    <p>{{ helper.description }}</p>
+                </div>
+                <div class="card-action">
+                    <a href="#">{{ helper.contacts }}</a>
+                    <button class="waves-effect waves-light btn" type="submit">{% trans "Request help" %}</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% if free_helpers.paginator.num_pages > 1 %}
+    <ul class="pagination">
+        {% if free_helpers.has_previous %}
+            <li class="waves-effect"><a href="?page={{ free_helpers.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+        {% endif %}
+        {% for i in free_helpers.paginator.page_range %}
+            {% if free_helpers.number == i %}
+                <li class="active"><a href="#!">{{ i }}</a></li>
+            {% elif i > free_helpers.number|add:'-3' and i < free_helpers.number|add:'3' %}
+                <li class="waves-effect"><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if free_helpers.has_next %}
+            <li class="waves-effect"><a href="?page={{ free_helpers.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+        {% endif %}
+    </ul>
+    {% endif %}
+{% elif form.is_bound %}
+    <p>{% trans "Unfortunately, no available helpers were found with the selected parameters. Try expanding the district or reducing the number of required tags." %}</p>
+{% endif %}
+<hr>
+<form method="post">
+    {% csrf_token %}
+    <label for="{{ form.userNick.id_for_label }}">{{ "User Nickname"|trans }}:</label>
+    {{ form.userNick }}
+    <br>
+    <label for="{{ form.category.id_for_label }}">{{ "Category"|trans }}:</label>
+    {{ form.category }}
+    <br>
+    <label for="{{ form.problemDescription.id_for_label }}">{{ "Describe problem"|trans }}:</label>
+    {{ form.problemDescription }}
+    <br>
+    <label for="{{ form.district.id_for_label }}">{{ "District"|trans }}:</label>
+    {{ form.district }}
+    <br>
+    <label for="{{ form.level.id_for_label }}">{{ "Level"|trans }}:</label>
+    {{ form.level }}
+    <br>
+    <button type="submit">{% trans "Send request to helper" %}</button>
+</form>
+<div class="row">
+    <div class="col s12 m4">
+        <div class="card-panel teal">
+            <span class="white-text"><strong>{% trans "Active helpers" %}</strong></span>
+            <span class="white-text">{{ active_helpers_count }}</span>
+        </div>
+    </div>
+    <div class="col s12 m4">
+        <div class="card-panel teal">
+                <span class="white-text"><strong>{% trans "Requests for help" %}</strong></span>
+    <span class="white-text">{{ help_requests_count }}</span>
+        </div>
+    </div>
+    <div class="col s12 m4">
+        <div class="card-panel teal">
+            <span class="white-text"><strong>{% trans "Online users" %}</strong></span>
+            <span class="white-text">{{ online_users_count }}</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base_templates/base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <h1>{{ review.reviewer_name }} {% trans "review" %}</h1>
+
+  <table>
+    <tr>
+      <td>{% trans "Reviewer Name" %}</td>
+      <td>{{ review.reviewer_name }}</td>
+    </tr>
+    <tr>
+      <td>{% trans "Helper Name" %}</td>
+      <td>{{ review.helper_name }}</td>
+    </tr>
+    <tr>
+      <td>{% trans "Tag" %}</td>
+      <td>{{ review.tag.name }}</td>
+    </tr>
+    <tr>
+      <td>{% trans "Rating" %}</td>
+      <td>{{ review.rating }}</td>
+    </tr>
+    <tr>
+      <td>{% trans "Level of Service" %}</td>
+      <td>{{ review.level_of_service }}</td>
+    </tr>
+    <tr>
+      <td>{% trans "Description" %}</td>
+      <td>{{ review.description }}</td>
+    </tr>
+  </table>
+
+  {% if user.is_authenticated %}
+  <div class="review-likes">
+    <p>{{ review.num_likes }} likes</p>
+    {% if user in review.likes.all %}
+    <form action="{% url 'reviews:unlike' review.pk %}" method="POST" class="like-form">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary">{% trans "Unlike" %}</button>
+    </form>
+    {% else %}
+    <form action="{% url 'reviews:like' review.pk %}" method="POST" class="like-form">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary">{% trans "Like" %}</button>
+    </form>
+    {% endif %}
+  </div>
+  {% endif %}
+{% endblock %}

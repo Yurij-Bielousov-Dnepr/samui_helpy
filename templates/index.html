@@ -1,0 +1,30 @@
+{% extends "base_templates/base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<h1>{% trans "Welcome to my multilingual project!" %}</h1>
+<p>{% trans "Are you a newcomer on the island and finding solutions to any problem takes a lot of time, effort, and money? Or are you just planning to visit us?" %}</p>
+<p>{% trans "For a modest fee, a friendly local can help you with:" %}</p>
+<ul>
+<li>{% trans "Consultation" %}</li>
+<li>{% trans "Joint problem solving" %}</li>
+<li>{% trans "Ready-made solutions" %}</li>
+</ul>
+<p>{% trans "The first thing you will encounter here is renting a motobike, you can:" %}</p>
+<ol>
+<li>{% trans "Wander the internet or salons for a long time" %}</li>
+<li>{% trans "Get filtered information" %}</li>
+<li>{% trans "A person who will bring you (and your motobike) to the place where you can choose and protect you from mistakes" %}</li>
+<li>{% trans "Turnkey solution according to specified parameters" %}</li>
+</ol>
+<p>{% trans "I went through this myself, and I had a person who guided me on the path of 2), but not everyone is so lucky..." %}</p>
+<p>{% trans "I solved the housing problem in the key of 0) and 1), and it took me a week..." %}</p>
+<p>{% trans "The island is very small, but wandering blindly is not so interesting, and a sightseeing tour is expensive? We solve it on 1)-2) for VIPs, solution 3)" %}</p>
+<p>{% trans "Buying souvenirs is best not to remember, it's pain, unexpected and merciless..." %}</p>
+<div class="button-container">
+<a class="button" href="{% url 'helpmy' %}" title="{% trans 'Click if you need help' %}">{% trans "I need help" %}</a>
+<span style="margin: 0 18px;"></span> <!-- space between buttons -->
+<a class="button" href="{% url 'helper_list' %}" title="{% trans 'Click to offer help' %}">{% trans "I want to offer help" %}</a>  </div>
+
+{% endblock %}

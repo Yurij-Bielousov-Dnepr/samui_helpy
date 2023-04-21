@@ -1,0 +1,78 @@
+Чтобы добавить карту Google на страницу проекта Django, вам нужно выполнить следующие шаги:
+
+Создайте API-ключ Google Maps, следуя инструкциям на сайте Google Cloud Platform.
+
+Установите библиотеку django-leaflet с помощью команды pip install django-leaflet.
+
+Добавьте leaflet и django-leaflet в INSTALLED_APPS в файле settings.py вашего проекта Django:
+
+python
+Copy code
+INSTALLED_APPS = [
+    # ...
+    'leaflet',
+    'django-leaflet',
+]
+Создайте Django View, который будет отображать карту Google. Вот пример:
+
+python
+Copy code
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+
+@login_required
+def my_map_view(request):
+    api_key = settings.GOOGLE_MAPS_API_KEY
+    return render(request, 'my_map.html', {'api_key': api_key})
+Создайте шаблон my_map.html:
+
+html
+Copy code
+{% load leaflet_tags %}
+{% leaflet_js %}
+{% leaflet_css %}
+
+<div id="map"></div>
+
+<script>
+    var map = L.map('map').setView([51.505, -0.09], 13);
+
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+            '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'your.mapbox.access.token'
+    }).addTo(map);
+
+</script>
+Вместо your.mapbox.access.token вы должны использовать свой API-ключ Google Maps.
+
+Добавьте URL-адрес в urls.py вашего проекта Django:
+
+python
+Copy code
+from django.urls import path
+from .views import my_map_view
+
+urlpatterns = [
+    # ...
+    path('my-map/', my_map_view, name='my_map'),
+]
+Чтобы получить ключ API для Google Maps, необходимо выполнить следующие шаги:
+
+Перейдите на сайт Google Cloud Console.
+Нажмите на кнопку "Select a project" в верхней панели, выберите или создайте проект, для которого вы хотите получить ключ API.
+Нажмите на кнопку "ENABLE APIS AND SERVICES" (включить API и сервисы), затем найдите и выберите "Maps JavaScript API" (API JavaScript для карт).
+Нажмите на кнопку "Enable" (включить), чтобы включить выбранный API.
+Нажмите на кнопку "Create credentials" (создать учетные данные), выберите "API key" (ключ API) в списке опций.
+Выберите "Application restrictions" (ограничения приложения) и задайте нужные вам настройки безопасности, если это необходимо.
+Выберите "HTTP referrers" (HTTP-ссылающиеся), чтобы указать список URL-адресов, с которых разрешено использование ключа API. Например, если ваш сайт имеет адрес http://example.com, то вы можете указать *.example.com/* в списке HTTP-ссылающихся.
+Нажмите на кнопку "Create" (создать) для создания ключа API.
+Скопируйте ключ API и сохраните его в безопасном месте.
+После получения ключа API для Google Maps вы можете использовать его в своем приложении для отображения карты и других функций Google Maps API. Обратите внимание, что для использования Google Maps API могут быть применены определенные ограничения и ограничения по количеству запросов. 
+Пожалуйста, ознакомьтесь с документацией Google Maps API для получения дополнительной информации.

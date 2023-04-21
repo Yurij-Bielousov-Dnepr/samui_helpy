@@ -1,0 +1,11 @@
+{% extends "base_templates/base.html" %}
+{% load i18n %}
+{% load static %}
+<form method="post">
+    {% csrf_token %}
+    <label for="chat_id">Chat ID:</label>
+    <input type="text" name="chat_id"><br><br>
+    <label for="message_text">Message Text:</label>
+    <textarea name="message_text"></textarea><br><br>
+    <input type="submit" value="Send">
+</form>

@@ -1,0 +1,26 @@
+{% extends "base_templates/base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+  <form method="post">
+    {% csrf_token %}
+    <label for="Helper_nick">{{ "Helper Nickname"}}:</label>
+    <input type="text" name="Helper_nick" id="Helper_nick">
+    <br>
+    <label for="category_help">{{ "Category Help" }}:</label>
+    <input type="text" name="category_help" id="category_help">
+    <br>
+    <label for="problem_description">{{ "Problem Description"}}:</label>
+    <textarea name="problem_description" id="problem_description"></textarea>
+    <br>
+    <label for="rate">{{ "Rate" }}:</label>
+    <input type="number" name="rate" id="rate" min="1" max="5">
+    <br>
+    <label for="comment">{{ "Comment" }}:</label>
+    <textarea name="comment" id="comment"></textarea>
+    <br>
+    <button type="submit">{% trans "Submit" %}</button>
+  </form>
+{% endblock %}

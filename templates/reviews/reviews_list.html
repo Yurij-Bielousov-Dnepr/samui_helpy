@@ -1,0 +1,132 @@
+{% extends "base_templates/base.html" %}
+{% load i18n %}
+{#{% load crispy_forms %}#}
+
+
+
+{% block content %}
+  <h1>{% trans "Reviews" %}</h1>
+
+  <form method="get">
+    <div class="row">
+      <!-- Other filter fields -->
+      <div class="input-field col s12 m3">
+        <label for="sort_by">{% trans "Sort by:" %}</label>
+        <select name="sort" id="sort_by">
+          <option value="reviewer_name">{% trans "Reviewer Name" %}</option>
+          <option value="helper_name">{% trans "Helper Name" %}</option>
+          <option value="tag">{% trans "Tag" %}</option>
+          <option value="rating">{% trans "Rating" %}</option>
+          <option value="level_of_service">{% trans "Level of Service" %}</option>
+        </select>
+      </div>
+      <div class="input-field col s12 m3">
+        <label for="sort_order">{% trans "Sort order:" %}</label>
+        <select name="order" id="sort_order">
+          <option value="asc">{% trans "Ascending" %}</option>
+          <option value="desc">{% trans "Descending" %}</option>
+        </select>
+      </div>
+      <div class="input-field col s12 m3">
+        <button type="submit" class="btn">{{ 'Search'}}</button>
+      </div>
+    </div>
+  </form>
+
+{#  <!-- Table and other template parts {% endblock %}{% block content %} -->#}
+
+
+  <form method="get">
+    <div class="row">
+      <div class="input-field col s12 m3">
+        {{ form.reviewer_name }}
+{#          |as_crispy_field#}
+      </div>
+      <div class="input-field col s12 m3">
+        {{ form.helper_name }}
+{#          |as_crispy_field#}
+      </div>
+      <div class="input-field col s12 m3">
+        {{ form.tag }}
+{#          |as_crispy_field#}
+      </div>
+      <div class="input-field col s12 m3">
+        {{ form.rating}}
+{#                |as_crispy_field #}
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12 m3">
+        {{ form.level_of_service }}
+{#          |as_crispy_field#}
+      </div>
+      <div class="input-field col s12 m3">
+        {{ form.sort_by }}
+{#          |as_crispy_field#}
+      </div>
+      <div class="input-field col s12 m3">
+        {{ form.sort_order }}
+{#          |as_crispy_field#}
+      </div>
+      <div class="input-field col s12 m3">
+        <button type="submit" class="btn">{{ 'Search' }}</button>
+{#          |trans#}
+      </div>
+    </div>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>{% trans "Reviewer Name" %}</th>
+        <th>{% trans "Helper Name" %}</th>
+        <th>{% trans "Tag" %}</th>
+        <th>{% trans "Rating" %}</th>
+        <th>{% trans "Level of Service" %}</th>
+        <th>{% trans "Actions" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for review in reviews %}
+      <tr>
+        <td>{{ review.reviewer_name }}</td>
+        <td>{{ review.helper_name }}</td>
+        <td>{{ review.tag.name }}</td>
+        <td>{{ review.rating }}</td>
+        <td>{{ review.level_of_service }}</td>
+        <td>
+          <a href="{% url 'reviews_list'  %}">{% trans "View" %}</a>
+          {% if user.is_staff %}
+          | <a href="{% url 'moderate'  %}">{% trans "Moderate" %}</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6">{% trans "No reviews found." %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% if reviews.has_other_pages %}
+  <div class="pagination">
+    {% if reviews.has_previous %}
+    <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ reviews.previous_page_number }}">{{ 'previous' }}</a>
+{#        |trans#}
+    {% endif %}
+    {% for page in reviews.paginator.page_range %}
+      {% if reviews.number == page %}
+      <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page }}"><b>{{ page }}</b></a>
+      {% elif page > reviews.number|add:'-3' and page < reviews.number|add:'3' %}
+      <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page }}">{{ page }}</a>
+      {% endif %}
+    {% endfor %}
+    {% if reviews.has_next %}
+    <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ reviews.next_page_number }}">{{ 'next' }}</a>
+{#        |trans#}
+    {% endif %}
+  </div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base_templates/base.html' %}
+{% load i18n %}
+{% block title %}
+
+    {% trans 'Edit event' %}{% endblock %}
+
+{% block content %}
+
+  <h1>{% trans 'Edit event' %}</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">{% trans 'Save' %}</button>
+  </form>
+{% endblock %}

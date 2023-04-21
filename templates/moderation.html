@@ -1,0 +1,46 @@
+{% extends 'base_templates/base.html' %}
+{% load i18n %}
+{% block title %} {% trans "Moderation" %} {% endblock %}
+
+{% block content %}
+<h1>{% trans "Moderation" %}</h1>
+<form method="post">
+  {% csrf_token %}
+{% for article in articles %}
+{% if not article.is_approved %}
+<h3>{{ article.title }}</h3>
+<p>{{ article.text }}</p>
+<input type="hidden" name="article_id" value="{{ article.id }}">
+<label><input type="radio" name="action_{{ article.id }}" value="approve">{% trans "Approve" %}</label>
+<label><input type="radio" name="action_{{ article.id }}" value="edit">{% trans "Edit" %}</label>
+<label><input type="radio" name="action_{{ article.id }}" value="delete">{% trans "Delete" %}</label>
+{% endif %}
+{% endfor %}
+
+{% for event in events %}
+{% if not event.is_approved %}
+<h3>{{ event.title }}</h3>
+<p>{{ event.description }}</p>
+<input type="hidden" name="event_id" value="{{ event.id }}">
+<label><input type="radio" name="action_{{ event.id }}" value="approve">{% trans "Approve" %}</label>
+<label><input type="radio" name="action_{{ event.id }}" value="edit">{% trans "Edit" %}</label>
+<label><input type="radio" name="action_{{ event.id }}" value="delete">{% trans "Delete" %}</label>
+{% endif %}
+{% endfor %}
+
+{% for review in reviews %}
+{% if not review.is_approved %}
+<h3>{{ review.title }}</h3>
+<p>{{ review.text }}</p>
+<input type="hidden" name="review_id" value="{{ review.id }}">
+<label><input type="radio" name="action_{{ review.id }}" value="approve">{% trans "Approve" %}</label>
+<label><input type="radio" name="action_{{ review.id }}" value="edit">{% trans "Edit" %}</label>
+<label><input type="radio" name="action_{{ review.id }}" value="delete">{% trans "Delete" %}</label>
+{% endif %}
+{% endfor %}
+
+<button type="submit">{% trans "Save" %}</button>
+
+</form>
+
+{% endblock %}

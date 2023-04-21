@@ -1,0 +1,52 @@
+Для добавления статей, которые прошли модерацию через фильтр в Django, вам нужно выполнить следующие шаги:
+
+Создайте модель для хранения статей. Например:
+python
+Copy code
+from django.db import models
+
+class Article(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    is_approved = models.BooleanField(default=False)
+В этой модели есть поле is_approved, которое по умолчанию установлено на False.
+
+Создайте представление (view), которое будет отображать только те статьи, которые прошли модерацию. Например:
+python
+Copy code
+from django.shortcuts import render
+from .models import Article
+
+def approved_articles(request):
+    articles = Article.objects.filter(is_approved=True)
+    return render(request, 'approved_articles.html', {'articles': articles})
+Это представление будет отображать только те статьи, у которых is_approved установлено на True.
+
+Создайте шаблон (template) для отображения статей. Например:
+html
+Copy code
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Approved Articles</h1>
+  {% for article in articles %}
+    <h2>{{ article.title }}</h2>
+    <p>{{ article.content }}</p>
+  {% empty %}
+    <p>No approved articles yet.</p>
+  {% endfor %}
+{% endblock %}
+В этом шаблоне мы используем цикл for, чтобы отобразить все статьи, которые прошли модерацию.
+
+Добавьте URL-адрес для представления approved_articles в файл urls.py. Например:
+python
+Copy code
+from django.urls import path
+from .views import approved_articles
+
+urlpatterns = [
+    path('approved-articles/', approved_articles, name='approved_articles'),
+]
+Это создаст URL-адрес /approved-articles/, который будет отображать только те статьи, которые прошли модерацию.
+
+Теперь, когда вы добавляете статьи в базу данных, вы можете установить is_approved на True, чтобы эти статьи отображались на странице approved_articles.
